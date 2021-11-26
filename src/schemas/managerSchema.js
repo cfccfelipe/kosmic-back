@@ -1,29 +1,33 @@
 const { gql } = require('apollo-server');
 
 //Schemas
-const bovineSchema = gql`
+const managerSchema = gql`
 	type Bovine {
+		id: ID
+		name: String
+		email: String
+		phone: Float
+		poisiton: String
+		bovines: [Bovines]
+		vets: [Vets]
+		create_at: String
+	}
+	type Bovines {
 		id: ID
 		name: String
 		birth: String
 		state: String
-		records: [Records]
 		create_at: String
 	}
-	type Records {
-		id: ID
-		record_id: Record
-		treatment: String
-	}
-	type Record {
-		id: ID
-		event_date: String
-		temperature: Float
-		heart_rate: Float
-		breathing_rate: Float
+	type Vets {
+		_id: ID
+		id: String
+		fullname: String
+		email: String
+		phone: Float
+		clinic: String
 		create_at: String
 	}
-
 	#Inputs
 	input BovineInput {
 		name: String
@@ -75,4 +79,4 @@ const bovineSchema = gql`
 	}
 `;
 
-module.exports = bovineSchema;
+module.exports = managerSchema;

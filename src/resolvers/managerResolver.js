@@ -1,14 +1,15 @@
 const Bovine = require('../entities/Bovine');
-const Record = require('../entities/Record');
+const Manager = require('../entities/Manager');
+const Vet = require('../entities/Vet');
 
 //Resolvers
-const bovineResolver = {
+const managerResolver = {
 	Query: {
-		getAllBovine: async () => {
+		getAllManagers: async () => {
 			try {
-				const resp = await Bovine.find({}).populate({
-					path: 'records.record_id',
-					select: 'id event_date temperature heart_rate breathing_rate creat_at'
+				const resp = await Manager.find({}).populate({
+					path: 'bovines.bovine_id vets.vet_id',
+					select: 'id name state birth fullname email phone clinic'
 				});
 				return resp;
 			} catch (e) {
@@ -133,4 +134,4 @@ const bovineResolver = {
 	}
 };
 
-module.exports = bovineResolver;
+module.exports = managerResolver;

@@ -29,12 +29,12 @@ const ManagersSchema = mongoose.Schema({
 
 	bovines: [
 		{
-			bovine: { type: Schema.ObjectId, ref: 'Bovine' }
+			bovine_id: { type: Schema.ObjectId, ref: 'Bovine' }
 		}
 	],
 	vets: [
 		{
-			vet: { type: Schema.ObjectId, ref: 'Vet' }
+			vet_id: { type: Schema.ObjectId, ref: 'Vet' }
 		}
 	],
 
