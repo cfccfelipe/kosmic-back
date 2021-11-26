@@ -1,14 +1,19 @@
 const { ApolloServer } = require('apollo-server');
 const vetResolver = require('./resolvers/vetResolver');
 const vetSchema = require('./schemas/vetSchema');
+const recordSchema = require('./schemas/recordSchema');
+const recordResolver = require('./resolvers/recordResolver');
+const bovineSchema = require('./schemas/bovineSchema');
+const bovineResolver = require('./resolvers/bovineResolver');
+
 const connectDb = require('./config/db');
 
 //Connect Db
 connectDb();
 
 //Import schemas and resolvers
-const typeDefs = vetSchema;
-const resolvers = vetResolver;
+const typeDefs = [vetSchema, recordSchema, bovineSchema];
+const resolvers = [vetResolver, recordResolver, bovineResolver];
 
 //Server with ApolloServer
 const server = new ApolloServer({

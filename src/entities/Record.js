@@ -1,11 +1,5 @@
 const mongoose = require('mongoose');
-const HistorySchema = mongoose.Schema({
-	id: {
-		type: String,
-		require: true,
-		trin: true
-	},
-
+const RecordsSchema = mongoose.Schema({
 	event_date: {
 		type: Date,
 		require: true,
@@ -23,10 +17,6 @@ const HistorySchema = mongoose.Schema({
 		type: Number,
 		require: true
 	},
-	treatment: {
-		type: String,
-		require: true
-	},
 
 	create_at: {
 		type: Date,
@@ -34,4 +24,4 @@ const HistorySchema = mongoose.Schema({
 	}
 });
 
-module.exports = mongoose.model('History', HistorySchema);
+module.exports = mongoose.model('Record', RecordsSchema);

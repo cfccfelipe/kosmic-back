@@ -1,10 +1,6 @@
 const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
 const BovinesSchema = mongoose.Schema({
-	id: {
-		type: String,
-		require: true,
-		trin: true
-	},
 	name: {
 		type: String,
 		require: true,
@@ -19,11 +15,12 @@ const BovinesSchema = mongoose.Schema({
 		type: String,
 		require: true,
 		trin: true,
-		default: 'Alive'
+		default: 'Saludable'
 	},
-	history: [
+	records: [
 		{
-			history: { type: Schema.ObjectId, ref: 'History' }
+			record_id: { type: Schema.ObjectId, ref: 'Record' },
+			treatment: { type: String }
 		}
 	],
 

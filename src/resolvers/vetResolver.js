@@ -45,7 +45,7 @@ const vetResolver = {
 			} catch (error) {
 				console.log(error);
 			}
-			return vetExist;
+			return 'Reporte eliminado';
 		},
 		updateVetById: async (_, { input }) => {
 			try {
