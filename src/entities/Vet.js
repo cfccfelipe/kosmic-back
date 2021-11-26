@@ -1,3 +1,4 @@
+const { ObjectId } = require('mongodb');
 const mongoose = require('mongoose');
 const VetsSchema = mongoose.Schema({
 	id: {
@@ -7,8 +8,7 @@ const VetsSchema = mongoose.Schema({
 	},
 	fullname: {
 		type: String,
-		require: true,
-		trin: true
+		require: true
 	},
 	email: {
 		type: String,
@@ -17,17 +17,16 @@ const VetsSchema = mongoose.Schema({
 		unique: true
 	},
 	phone: {
-		type: String,
+		type: Number,
 		require: true,
-		trin: true,
-		unique: true
+		unique: false
 	},
 
 	clinic: {
 		type: String,
-		require: true,
 		trin: true,
-		unique: true
+		require: true,
+		unique: false
 	},
 
 	create_at: {

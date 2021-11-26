@@ -18,11 +18,10 @@ const vetResolver = {
 	},
 	Mutation: {
 		newVet: async (_, { input }) => {
-			// const vetExists = await Vet.findOne({ email });
-			// if (vetExists) {
-			// 	throw new Error('Veterinario existe');
-			// }
-
+			const vetExists = await Vet.findOne({ email: input.email });
+			if (vetExists) {
+				throw new Error('Veterinario existe');
+			}
 			try {
 				const vetInsert = new Vet(input);
 				await vetInsert.save();
@@ -32,6 +31,41 @@ const vetResolver = {
 				console.log(error);
 			}
 			return 'Creando...';
+		},
+		deleteVetById: async (_, { input }) => {
+			try {
+				const { id } = input;
+				let vetExist = await Vet.findById(id);
+				if (!vetExist) {
+					throw new Error('No existe el veterinario');
+				}
+				await vetExist.remove(input);
+				await vetExist.save();
+				return 'Veterinario eliminado';
+			} catch (error) {
+				console.log(error);
+			}
+			return vetExist;
+		},
+		updateVetById: async (_, { input }) => {
+			try {
+				const { id, email, phone } = input;
+				let vetExist = await Vet.findById(id);
+				if (!vetExist) {
+					throw new Error('No existe el veterinario');
+				}
+				if (phone) {
+					vetExist.phone = phone;
+				}
+				if (email) {
+					vetExist.email = email;
+				}
+				await vetExist.save();
+				return vetExist;
+			} catch (error) {
+				console.log(error);
+			}
+			return vetExist;
 		}
 	}
 };

@@ -1,11 +1,11 @@
 const mongoose = require('mongoose');
-const UsersSchema = mongoose.Schema({
+const ManagersSchema = mongoose.Schema({
 	id: {
 		type: String,
 		require: true,
 		trin: true
 	},
-	fullname: {
+	name: {
 		type: String,
 		require: true,
 		trin: true
@@ -16,15 +16,32 @@ const UsersSchema = mongoose.Schema({
 		trin: true,
 		unique: true
 	},
-	password: {
+	phone: {
+		type: Number,
+		require: true
+	},
+
+	position: {
 		type: String,
 		require: true,
 		trin: true
 	},
+
+	bovines: [
+		{
+			bovine: { type: Schema.ObjectId, ref: 'Bovine' }
+		}
+	],
+	vets: [
+		{
+			vet: { type: Schema.ObjectId, ref: 'Vet' }
+		}
+	],
+
 	create_at: {
 		type: Date,
 		default: Date.now()
 	}
 });
 
-module.exports = mongoose.model('User', UsersSchema);
+module.exports = mongoose.model('Manager', ManagersSchema);

@@ -7,19 +7,28 @@ const vetSchema = gql`
 		id: String
 		fullname: String
 		email: String
-		phone: String
+		phone: Float
 		clinic: String
 		create_at: String
 	}
 
-	#Input
-	#Mutation
+	#Inputs
 	input VetInput {
 		id: String!
 		fullname: String!
 		email: String!
-		phone: String!
+		phone: Float!
 		clinic: String!
+	}
+
+	input VetIdInput {
+		id: ID!
+	}
+
+	input VetUpdateByIdInput {
+		id: ID!
+		email: String
+		phone: Float
 	}
 
 	#Querys and mutation
@@ -29,6 +38,8 @@ const vetSchema = gql`
 	}
 	type Mutation {
 		newVet(input: VetInput): Vet
+		deleteVetById(input: VetIdInput): String
+		updateVetById(input: VetUpdateByIdInput): Vet
 	}
 `;
 
