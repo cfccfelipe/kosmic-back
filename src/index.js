@@ -1,4 +1,5 @@
 const { ApolloServer } = require('apollo-server');
+
 const vetResolver = require('./resolvers/vetResolver');
 const vetSchema = require('./schemas/vetSchema');
 const recordSchema = require('./schemas/recordSchema');
@@ -29,6 +30,6 @@ const server = new ApolloServer({
 });
 
 //Run Server
-server.listen().then(({ url }) => {
+server.listen({ port: process.env.PORT || 4000 }).then(({ url }) => {
 	console.log(`Run server on URL ${url}`);
 });
