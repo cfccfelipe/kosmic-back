@@ -16,117 +16,121 @@ const managerResolver = {
 				console.error(e);
 			}
 		},
-		getBovineById: async (_, { id }) => {
-			const bovine = await Bovine.findById(id).populate({
-				path: 'records.record_id',
-				select: 'id event_date temperature heart_rate breathing_rate create_at'
+		getManagerById: async (_, { id }) => {
+			const manager = await Manager.findById(id).populate({
+				path: 'bovines.bovine_id vets.vet_id',
+				select: 'id name state birth fullname email phone clinic'
 			});
-			return bovine;
+			return manager;
 		}
 	},
 	Mutation: {
-		newBovine: async (_, { input }) => {
-			const bovineExists = await Bovine.findOne({ _id: input.id });
-			console.log(bovineExists);
-			if (bovineExists) {
-				throw new Error('Ya existe el bovino');
+		newManager: async (_, { input }) => {
+			const managerExists = await Manager.findOne({ id: input.id });
+			console.log(managerExists);
+			if (managerExists) {
+				throw new Error('Ya existe el gestor');
 			}
 			try {
-				const bovineInsert = new Bovine(input);
-				await bovineInsert.save();
+				const managerInsert = new Manager(input);
+				await managerInsert.save();
 
-				return bovineInsert;
+				return managerInsert;
 			} catch (error) {
 				console.log(error);
 			}
 			return 'Creando...';
 		},
-		deleteBovineById: async (_, { input }) => {
+		deleteManagerById: async (_, { input }) => {
 			try {
 				const { id } = input;
-				let bovineExist = await Bovine.findById(id);
-				if (!bovineExist) {
-					throw new Error('No existe el bovino');
+				let managerExist = await Manager.findById(id);
+				if (!managerExist) {
+					throw new Error('No existe el Gestor');
 				}
-				await bovineExist.remove(input);
-				await bovineExist.save();
-				return 'Bovino eliminado';
+				await managerExist.remove(input);
+				await managerExist.save();
+				return 'Gestor eliminado';
 			} catch (error) {
 				console.log(error);
 			}
-			return 'Bovino eliminado';
+			return 'Gestor eliminado';
 		},
-		updateBovineById: async (_, { input }) => {
+		updateManagerById: async (_, { input }) => {
 			try {
-				const { id, state } = input;
-				let bovinoExist = await Bovine.findById({ id: id });
+				const { position, phone, email } = input;
+				let managerExist = await Manager.findById(id);
 				if (!bovinoExist) {
-					throw new Error('No existe el bovino');
+					throw new Error('No existe el gestor');
 				}
-				bovinoExist.state = state;
-				await bovinoExist.save();
-				return bovinoExist;
+				if (position) {
+					managerExist.position = position;
+				}
+				if (phone) {
+					managerExist.phone = phone;
+				}
+				if (email) {
+					managerExist.email = email;
+				}
+				await managerExist.save();
+				return managerExist;
 			} catch (error) {
 				console.log(error);
 			}
-			return bovinoExist;
+			return managerExist;
 		},
-		newRecordOnBovineById: async (_, { input }) => {
+		newVetOnManagerById: async (_, { input }) => {
 			try {
-				const {
-					bovine_id,
-					records: { newrecord }
-				} = input;
-				const bovineExist = await Bovine.findById(bovine_id).populate({
+				const { manager_id, vet_id } = input;
+				const managerExist = await Manager.findById(manager_id).populate({
+					path: 'vets.vet_id',
+					select: 'id fullname email phone clinic create_at'
+				});
+				if (!managerExist) {
+					throw new Error('El manager no existe');
+				}
+				let vet = await Vet.findById(vet_id);
+				console.log(vet);
+				if (managerExist.vets.find((vet) => vet.vet_id._id == vet_id)) {
+					throw new Error('El veterinario ya fue asignado a el gestor');
+				}
+
+				await managerExist.vets.push({
+					vet_id: vet,
+					_id: vet._id
+				});
+				await managerExist.save();
+				return managerExist;
+			} catch (error) {
+				console.log(error);
+			}
+		},
+		newBovineOnManagerById: async (_, { input }) => {
+			try {
+				const { manager_id, bovine_id } = input;
+				const managerExist = await Manager.findById(manager_id).populate({
+					path: 'bovines.bovine_id',
+					select: '_id name birth state create_at'
+				});
+				if (!managerExist) {
+					throw new Error('El manager no existe');
+				}
+				let bovine = await Bovine.findById(bovine_id).populate({
 					path: 'records.record_id',
 					select:
 						'id event_date temperature heart_rate breathing_rate create_at'
 				});
-				if (!bovineExist) {
-					throw new Error('El bovino no existe');
+
+				if (managerExist.bovines.find((bovine) => bovine.id == bovine_id)) {
+					throw new Error('El bovino ya fue asignado a el gestor');
 				}
-				const recordInsert = new Record({
-					event_date: newrecord.event_date,
-					temperature: newrecord.temperature,
-					heart_rate: newrecord.heart_rate,
-					breathing_rate: newrecord.breathing_rate
+
+				await managerExist.bovines.push({
+					bovine_id: bovine,
+					_id: bovine.id
 				});
-				await recordInsert.save();
-				let bovineRecord = await Record.findById({ _id: recordInsert._id });
-				await bovineExist.records.push({
-					record_id: bovineRecord,
-					id: recordInsert._id
-				});
-				await bovineExist.save();
-				return bovineExist;
-			} catch (error) {
-				console.log(error);
-			}
-		},
-		updateTreatmentBovineById: async (_, { input }) => {
-			try {
-				const {
-					id_bovine,
-					records: { id, treatment }
-				} = input;
-				const bovineExist = await Bovine.findById(id_bovine).populate({
-					path: 'records.record_id',
-					select:
-						'id event_date temperature heart_rate breathing_rate create_at'
-				});
-				if (!bovineExist) {
-					throw new Error('El bovino no existe');
-				}
-				const treatold = await bovineExist.records.filter(
-					(record) => record.id === id
-				)[0];
-				console.log(treatold);
-				if (!treatold) {
-					throw new Error('El tratamiento no existe');
-				}
-				treatold.treatment = treatment;
-				await bovineExist.save();
-				return bovineExist;
+				await managerExist.save();
+				return managerExist;
 			} catch (error) {
 				console.log(error);
 			}

@@ -2,24 +2,33 @@ const { gql } = require('apollo-server');
 
 //Schemas
 const managerSchema = gql`
-	type Bovine {
-		id: ID
+	type Manager {
+		_id: ID
+		id: String
 		name: String
 		email: String
 		phone: Float
-		poisiton: String
+		position: String
 		bovines: [Bovines]
 		vets: [Vets]
 		create_at: String
 	}
 	type Bovines {
+		_id: ID
+		bovine_id: Bovine
+	}
+	type Vets {
+		_id: ID
+		vet_id: Vet
+	}
+	type Bovine {
 		id: ID
 		name: String
 		birth: String
 		state: String
 		create_at: String
 	}
-	type Vets {
+	type Vet {
 		_id: ID
 		id: String
 		fullname: String
@@ -29,53 +38,47 @@ const managerSchema = gql`
 		create_at: String
 	}
 	#Inputs
-	input BovineInput {
+	input ManagerInput {
+		_id: ID
+		id: String
 		name: String
-		birth: String
+		email: String
+		phone: Float
+		position: String
 	}
 
-	input BovineIdInput {
+	input ManagerIdInput {
 		id: ID!
 	}
 
-	input BovineUpdateByIdInput {
+	input ManagerUpdateByIdInput {
 		id: ID!
-		state: String!
+		position: String
+		phone: String
+		email: String
 	}
-	input TreatmentUpdate {
-		id_bovine: ID!
-		records: RecordUpdateInput
+
+	input NewVetOnManagerInputById {
+		manager_id: ID
+		vet_id: ID
 	}
-	input RecordUpdateInput {
-		id: ID!
-		treatment: String!
-	}
-	input NewRecordOnBovineInputById {
+
+	input NewBovineOnManagerInputById {
+		manager_id: ID
 		bovine_id: ID
-		records: RecordInputID
-	}
-	input RecordInputID {
-		newrecord: RecordInput
-		treatment: String
-	}
-	input RecordInput {
-		event_date: String!
-		temperature: Float!
-		heart_rate: Float!
-		breathing_rate: Float!
 	}
 
 	#Querys and mutation
 	type Query {
-		getAllBovine: [Bovine]
-		getBovineById(id: String!): Bovine
+		getAllManagers: [Manager]
+		getManagerById(id: String!): Manager
 	}
 	type Mutation {
-		newBovine(input: BovineInput): Bovine
-		deleteBovineById(input: BovineIdInput): String
-		updateBovineById(input: BovineUpdateByIdInput): Bovine
-		newRecordOnBovineById(input: NewRecordOnBovineInputById): Bovine
-		updateTreatmentBovineById(input: TreatmentUpdate): Bovine
+		newManager(input: ManagerInput): Manager
+		deleteManagerById(input: ManagerIdInput): String
+		updateManagerById(input: ManagerUpdateByIdInput): Manager
+		newVetOnManagerById(input: NewVetOnManagerInputById): Manager
+		newBovineOnManagerById(input: NewBovineOnManagerInputById): Bovine
 	}
 `;
 
