@@ -1,5 +1,5 @@
-const Bovine = require('../entities/Bovine');
-const Record = require('../entities/Record');
+const Bovine = require('../schemas/Bovine');
+const Record = require('../schemas/Record');
 
 //Resolvers
 const bovineResolver = {

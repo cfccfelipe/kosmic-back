@@ -1,4 +1,4 @@
-const Vet = require('../entities/Vet');
+const Vet = require('../schemas/Vet');
 
 //Resolvers
 const vetResolver = {

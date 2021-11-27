@@ -1,6 +1,6 @@
-const Bovine = require('../entities/Bovine');
-const Manager = require('../entities/Manager');
-const Vet = require('../entities/Vet');
+const Bovine = require('../schemas/Bovine');
+const Manager = require('../schemas/Manager');
+const Vet = require('../schemas/Vet');
 
 //Resolvers
 const managerResolver = {

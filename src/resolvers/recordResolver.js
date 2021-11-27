@@ -1,4 +1,4 @@
-const Record = require('../entities/Record');
+const Record = require('../schemas/Record');
 
 //Resolvers
 const recordResolver = {
