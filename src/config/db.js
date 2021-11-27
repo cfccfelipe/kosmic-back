@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 //File config mongodb with mongoose library
-require('dotenv').config({ path: 'develop.env' });
+require('dotenv').config({ path: '.env' });
 
 const connectDb = async () => {
 	try {
