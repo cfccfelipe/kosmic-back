@@ -58,7 +58,7 @@ const bovineResolver = {
 		updateBovineById: async (_, { input }) => {
 			try {
 				const { id, state } = input;
-				let bovinoExist = await Bovine.findById({ id: id });
+				let bovinoExist = await Bovine.findById(id);
 				if (!bovinoExist) {
 					throw new Error('No existe el bovino');
 				}
